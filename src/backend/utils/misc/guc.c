@@ -64,6 +64,7 @@
 #include "pgxc/poolmgr.h"
 #include "pgxc/nodemgr.h"
 #include "pgxc/xc_maintenance_mode.h"
+#include "pgxc/xc_watchdog.h"
 #endif
 #include "postmaster/autovacuum.h"
 #include "postmaster/bgwriter.h"
@@ -645,6 +646,8 @@ const char *const config_group_names[] =
 	gettext_noop("Coordinator Options"),
 	/* XC_HOUSEKEEPING_OPTIONS */
 	gettext_noop("XC Housekeeping Options"),
+	/* XC_HA_OPTIONS */
+	gettext_noop("XC_HA_Options"),
 #endif
 	/* help_config wants this array to be null-terminated */
 	NULL
@@ -813,6 +816,15 @@ static struct config_bool ConfigureNamesBool[] =
 		},
 		&enable_remotegroup,
 		true,
+		NULL, NULL, NULL
+	},
+	{
+		{"xc_watchdog", PGC_POSTMASTER, XC_HA_OPTIONS,
+			gettext_noop("Specifies to use xc_watchdog."),
+			NULL
+		},
+		&xc_watchdog,
+		false,
 		NULL, NULL, NULL
 	},
 #endif
@@ -2538,6 +2550,15 @@ static struct config_int ConfigureNamesInt[] =
 		},
 		&MaxCoords,
 		16, 2, 65535,
+		NULL, NULL, NULL
+	},
+	{
+		{"xc_weatchdog_internal", PGC_POSTMASTER, XC_HA_OPTIONS,
+			gettext_noop("XC_watchdog timer update interval, in millisecond."),
+			NULL
+		},
+		&xc_watchdog_interval,
+		60 * 1000, 1, INT_MAX/1000,
 		NULL, NULL, NULL
 	},
 #endif

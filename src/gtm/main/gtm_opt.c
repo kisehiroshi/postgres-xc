@@ -134,11 +134,11 @@ struct config_bool ConfigureNamesBool[] =
 		false, false, NULL
 	},
 	{
-		{GTMC_OPTNAME_GTM_WATCHDOG, GTMC_STARTUP,
+		{GTM_OPTNAME_GTM_WATCHDOG, GTMC_STARTUP,
 			gettext_noop("Specifies if gtm watchdog option is used."),
 			gettext_noop("Default value is off."),
-		 0
-		}
+			0
+		},
 		&gtm_watchdog,
 		false, false, NULL
 	},
@@ -202,10 +202,10 @@ struct config_int ConfigureNamesInt[] =
 		0, NULL
 	},
 	{
-		{GTM_OPTNAME_WATCHDOG_INTERVAL, GTMC_STARTUP,
+		{GTM_OPTNAME_GTM_WATCHDOG_INTERVAL, GTMC_STARTUP,
 			gettext_noop("Specifies interval to increment watchdog timer in millisecond."),
-			gettext_noop("Default value is 60sec (60,000 milliseconds).");
-		 0
+			gettext_noop("Default value is 60sec (60,000 milliseconds)."),
+			0
 		},
 		&gtm_watchdog_interval,
 		60 * 1000, 60 * 1000, INT_MAX/1000,

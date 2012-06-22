@@ -15,7 +15,7 @@ ifneq ($(PORTNAME), win32)
 override CFLAGS += $(PTHREAD_CFLAGS)
 endif
 
-OBJS=proxy_main.o proxy_thread.o proxy_utils.o gtm_proxy_opt.o
+OBJS=proxy_main.o proxy_thread.o proxy_utils.o gtm_proxy_opt.o gtm_proxy_watchdog.o
 
 OTHERS= ../libpq/libpqcomm.a ../path/libgtmpath.a ../recovery/libgtmrecovery.a ../client/libgtmclient.a ../common/libgtm.a
 

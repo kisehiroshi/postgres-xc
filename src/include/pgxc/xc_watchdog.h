@@ -6,7 +6,4 @@
 #include "postgres.h"
 #include "utils/guc.h"
 
-extern bool xc_watchdog;
-extern int	xc_watchdog_interval;
-
 #endif /* XC_WATCHDOG_H */

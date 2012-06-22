@@ -64,7 +64,7 @@
 #include "pgxc/poolmgr.h"
 #include "pgxc/nodemgr.h"
 #include "pgxc/xc_maintenance_mode.h"
-#include "pgxc/xc_watchdog.h"
+#include "pgxc/node_watchdog.h"
 #endif
 #include "postmaster/autovacuum.h"
 #include "postmaster/bgwriter.h"

@@ -67,6 +67,9 @@ extern char *GTMProxyDataDir;
 extern char *GTMProxyConfigFileName;
 extern char *GTMConfigFileName;
 
+extern bool gtm_watchdog;
+extern bool gtm_watchdog_interval;
+
 
 /*
  * Macros for values
@@ -152,6 +155,16 @@ Config_Type_Names();
 
 struct config_bool ConfigureNamesBool[] =
 {
+	{
+		{
+			GTM_OPTNAME_GTM_WATCHDOG, GTMC_STARTUP,
+			gettext_noop("Specifies if gtm watchdog option is used."),
+			gettext_noop("Default value is off."),
+			0
+		},
+		&gtm_watchdog,
+		false, false, NULL
+	},
 	/* End-of-list marker */
 	{
 		{NULL, 0, NULL, NULL, 0}, NULL, false, false, NULL
@@ -296,6 +309,16 @@ struct config_int ConfigureNamesInt[] =
 		},
 		&GTMProxyWorkerThreads,
 		GTM_PROXY_DEFAULT_WORKERS, 1, INT_MAX,
+		0, NULL
+	},
+	{
+		{GTM_OPTNAME_GTM_WATCHDOG_INTERVAL, GTMC_STARTUP,
+			gettext_noop("Specifies interval to increment watchdog timer in millisecond."),
+			gettext_noop("Default value is 60sec (60,000 milliseconds)."),
+			0
+		},
+		&gtm_watchdog_interval,
+		60 * 1000, 60 * 1000, INT_MAX/1000,
 		0, NULL
 	},
 	/* End-of-list marker */

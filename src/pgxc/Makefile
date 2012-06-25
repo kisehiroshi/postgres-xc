@@ -12,6 +12,6 @@ subdir = src/pgxc
 top_builddir = ../..
 include $(top_builddir)/src/Makefile.global
 
-SUBDIRS = tools
+SUBDIRS = tools xc_watchdog
 
 $(recurse)

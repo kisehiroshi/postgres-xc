@@ -67,8 +67,8 @@ extern char *GTMProxyDataDir;
 extern char *GTMProxyConfigFileName;
 extern char *GTMConfigFileName;
 
-extern bool gtm_watchdog;
-extern bool gtm_watchdog_interval;
+extern bool gtm_proxy_watchdog;
+extern bool gtm_proxy_watchdog_interval;
 
 
 /*
@@ -162,7 +162,7 @@ struct config_bool ConfigureNamesBool[] =
 			gettext_noop("Default value is off."),
 			0
 		},
-		&gtm_watchdog,
+		&gtm_proxy_watchdog,
 		false, false, NULL
 	},
 	/* End-of-list marker */
@@ -317,7 +317,7 @@ struct config_int ConfigureNamesInt[] =
 			gettext_noop("Default value is 60sec (60,000 milliseconds)."),
 			0
 		},
-		&gtm_watchdog_interval,
+		&gtm_proxy_watchdog_interval,
 		60 * 1000, 60 * 1000, INT_MAX/1000,
 		0, NULL
 	},

@@ -72,6 +72,8 @@ int			tcp_keepalives_count;
 char		*error_reporter;
 char		*status_reader;
 bool		isStartUp;
+extern bool	gtm_watchdog;
+extern int	gtm_watchdog_interval;	/* in milliseconds */
 
 /* If this is GTM or not */
 /*
@@ -195,6 +197,8 @@ BaseInit()
 
 	GTM_InitTxnManager();
 	GTM_InitSeqManager();
+
+	gtmWd_restore();
 
 	/*
 	 * The memory context is now set up.
@@ -818,8 +822,13 @@ ServerLoop(void)
 			struct timeval timeout;
 			GTM_ThreadInfo *my_threadinfo = GetMyThreadInfo;
 
+#if 0
 			timeout.tv_sec = 60;
 			timeout.tv_usec = 0;
+#else
+			timeout.tv_sec = gtm_watchdog_interval/1000;
+			timeout.tv_usec = (gtm_watchdog_interval % 1000) * 1000;
+#endif
 
 			/* 
 			 * Now GTM-Standby can backup current status during this region
@@ -827,6 +836,9 @@ ServerLoop(void)
 			GTM_RWLockRelease(&my_threadinfo->thr_lock);
 
 			selres = select(nSockets, &rmask, NULL, NULL, &timeout);
+
+			/* Watchdog timer increment */
+			gtmWd_increment();
 
 			/*
 			 * Prohibit GTM-Standby backup from here.

@@ -89,6 +89,7 @@ void gtmWd_detach(void)
 {
 	if (watchdog)
 		xcWd_detachTimer(watchdog);
+	watchdog = NULL;
 	write_watchdog_file(0);
 }
 

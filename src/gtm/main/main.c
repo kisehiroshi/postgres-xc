@@ -46,6 +46,8 @@
 #include "gtm/gtm_msg.h"
 #include "gtm/gtm_opt.h"
 #include "gtm/gtm_utils.h"
+#include "gtm/gtm_watchdog.h"
+
 
 extern int	optind;
 extern char *optarg;
@@ -814,6 +816,8 @@ ServerLoop(void)
 
 			close(ctlfd);
 
+			gtmWd_detach();
+
 			exit(1);
 		}
 
@@ -826,6 +830,9 @@ ServerLoop(void)
 			timeout.tv_sec = 60;
 			timeout.tv_usec = 0;
 #else
+			/*
+			 * Now select timeout is based upon GTM option value.
+			 */
 			timeout.tv_sec = gtm_watchdog_interval/1000;
 			timeout.tv_usec = (gtm_watchdog_interval % 1000) * 1000;
 #endif

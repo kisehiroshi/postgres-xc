@@ -45,7 +45,7 @@
 /* For reconnect control lock */
 #include "gtm/gtm_lock.h"
 #include "gtm/gtm_opt.h"
-
+#include "gtm/gtm_proxy_watchdog.h"
 extern int	optind;
 extern char *optarg;
 
@@ -1017,6 +1017,9 @@ ServerLoop(void)
 			 * 
 			 * !! TODO
 			 */
+
+			gtmPxyWd_detach();
+
 			exit(1);
 		}
 

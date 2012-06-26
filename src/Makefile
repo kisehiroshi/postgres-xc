@@ -15,9 +15,10 @@ include Makefile.global
 SUBDIRS = \
 	port \
 	timezone \
+	pgxc/xc_watchdog \
 	gtm \
 	interfaces \
-	pgxc \
+	pgxc/tools \
 	backend \
 	backend/utils/mb/conversion_procs \
 	backend/snowball \

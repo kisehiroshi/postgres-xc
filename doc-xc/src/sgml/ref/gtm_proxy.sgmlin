@@ -211,6 +211,42 @@ PostgreSQL documentation
     </listitem>
    </varlistentry>
 
+   <varlistentry id="gtm-proxy-opt-watchdog" xreflabel="gtm_proxy_opt_watchdog">
+    <term><varname>gtm_watchdog</varname> (<type>boolean</type>)</term>
+    <indexterm>
+     <primary><varname>gtm_watchdog</varname> configuration parameter</primary>
+    </indexterm>
+    <listitem>
+     <para>
+      Specifies to enable/disable watchdog timer for gtm_proxy.
+     </para>
+     <para>
+      If it is turned on, watchdog timer will be updated according
+      to <varname>gtm_watchdog_interval</varname> so that external
+      tool check this to determine if gtm is running or not.
+     </para>
+     <para>
+      Default value is off.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="gtm-proxy-opt-watchdog-interval" xreflabel="gtm_proxy_opt_watchdog_interval">
+    <term><varname>gtm_watchdog_interval</varname> (<type>integer</type>)</term>
+    <indexterm>
+     <primary><varname>gtm_watchdog_interval</varname> configuration parameter</primary>
+    </indexterm>
+    <listitem>
+     <para>
+      Specifies interval to update gtm_proxy watchdog timer in millisecond.
+     </para>
+     <para>
+      Default value is 60 second (60,000).
+     </para>
+    </listitem>
+   </varlistentry>
+
+
    <varlistentry id="gtm-proxy-opt-keepalives-count" xreflabel="gtm_proxy_opt_keepalives_count">
     <term><varname>keepalives_count</varname> (<type>integer</type>)</term>
     <indexterm>

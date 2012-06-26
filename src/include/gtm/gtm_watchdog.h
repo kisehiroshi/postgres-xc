@@ -2,8 +2,9 @@
 #define GTM_WATCHDOG_H
 #include "pgxc/xc_watchdog.h"
 
-void gtmWd_init(void);
-void gtmWd_increment(void);
-void gtmWd_restore(void);
+extern void gtmWd_init(void);
+extern void gtmWd_increment(void);
+extern void gtmWd_restore(void);
+extern void gtmWd_detach(void);
 
 #endif /* GTM_WATCHDOG_H */

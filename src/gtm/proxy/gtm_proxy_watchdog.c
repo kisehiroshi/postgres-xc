@@ -1,3 +1,4 @@
+#include "gtm/gtm_c.h"
 #include "gtm/gtm_proxy_watchdog.h"
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -79,6 +80,13 @@ void gtmPxyWd_restore(void)
 			 */
 		}
 	}
+}
+
+void gtmPxyWd_detach(void)
+{
+	if (watchdog)
+		xcWd_detachTimer(watchdog);
+	write_watchdog_file(0);
 }
 
 static void write_watchdog_file(int shm_id)

@@ -1,3 +1,7 @@
+/*
+#include "gtm/gtm_c.h"
+*/
+#include "c.h"
 #include "gtm/gtm_watchdog.h"
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -80,6 +84,14 @@ void gtmWd_restore(void)
 		}
 	}
 }
+
+void gtmWd_detach(void)
+{
+	if (watchdog)
+		xcWd_detachTimer(watchdog);
+	write_watchdog_file(0);
+}
+
 
 static void write_watchdog_file(int shm_id)
 {

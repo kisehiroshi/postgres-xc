@@ -3,8 +3,6 @@
 
 #include <unistd.h>
 #include "c.h"
-#include "postgres.h"
-#include "utils/guc.h"
 
 /*
  * Xc_watchdog memory structure

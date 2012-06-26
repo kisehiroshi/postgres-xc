@@ -17,7 +17,7 @@ endif
 
 OBJS=main.o gtm_thread.o gtm_txn.o gtm_seq.o gtm_snap.o gtm_time.o gtm_standby.o gtm_opt.o gtm_watchdog.o
 
-OTHERS= ../libpq/libpqcomm.a ../path/libgtmpath.a ../recovery/libgtmrecovery.a ../client/libgtmclient.a ../common/libgtm.a ../../port/libpgport.a 
+OTHERS= ../libpq/libpqcomm.a ../path/libgtmpath.a ../recovery/libgtmrecovery.a ../client/libgtmclient.a ../common/libgtm.a ../../port/libpgport.a ../../pgxc/xc_watchdog/common/libxcwatchdog.a
 
 LDFLAGS=-L$(top_builddir)/common -L$(top_builddir)/libpq
 

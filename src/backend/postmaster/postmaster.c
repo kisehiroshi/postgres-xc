@@ -136,6 +136,10 @@
 #include "storage/spin.h"
 #endif
 
+#ifdef PGXC
+#include "pgxc/node_watchdog.h"
+#endif
+
 
 /*
  * List of active backends (or child processes anyway; we don't actually
@@ -1187,8 +1191,17 @@ PostmasterMain(int argc, char *argv[])
 	}
 #endif
 
+#ifdef PGXC	/* xc_watchdog */
+	nodeWd_restore();
+	nodeWd_setStatus(RunMode_Running);
+#endif
+	
 	status = ServerLoop();
 
+#ifdef PGXC /* xc_watchdog */
+	nodeWd_setStatus(RunMode_Stopped);
+	nodeWd_detach();
+#endif
 	/*
 	 * ServerLoop probably shouldn't ever return, but if it does, close down.
 	 */
@@ -1483,8 +1496,13 @@ ServerLoop(void)
 			/* must set timeout each time; some OSes change it! */
 			struct timeval timeout;
 
+#ifdef PGXC	/* xc_watchdog */
+			timeout.tv_sec = xc_watchdog_interval/1000;
+			timeout.tv_usec = (xc_watchdog_interval % 1000) * 1000;
+#else
 			timeout.tv_sec = 60;
 			timeout.tv_usec = 0;
+#endif
 
 			selres = select(nSockets, &rmask, NULL, NULL, &timeout);
 		}
@@ -1494,6 +1512,10 @@ ServerLoop(void)
 		 * signal handlers to do nontrivial work.)
 		 */
 		PG_SETMASK(&BlockSig);
+
+#ifdef PGXC	/* xc_watchdog */
+		nodeWd_increment();
+#endif
 
 		/* Now check the select() result */
 		if (selres < 0)

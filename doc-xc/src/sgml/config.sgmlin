@@ -6985,6 +6985,41 @@ LOG:  CleanUpLock: deleting: lock(0xb7acd844) id(24688,24696,0,0,0,1)
       </listitem>
      </varlistentry>
 
+   <varlistentry id="guc-xc-watchdog" xreflabel="guc_xc_watchdog">
+    <term><varname>xc_watchdog</varname> (<type>boolean</type>)</term>
+    <indexterm>
+     <primary><varname>xc_watchdog</varname> configuration parameter</primary>
+    </indexterm>
+    <listitem>
+     <para>
+      Specifies to enable/disable watchdog timer for coordinator/datanode.
+     </para>
+     <para>
+      If it is turned on, watchdog timer will be updated according
+      to <varname>xc_watchdog_interval</varname> so that external
+      tool check this to determine if gtm is running or not.
+     </para>
+     <para>
+      Default value is off.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="guc-xc-watchdog-interval" xreflabel="guc_xc_watchdog_interval">
+    <term><varname>xc_watchdog_interval</varname> (<type>integer</type>)</term>
+    <indexterm>
+     <primary><varname>xc_watchdog_interval</varname> configuration parameter</primary>
+    </indexterm>
+    <listitem>
+     <para>
+      Specifies interval to update gtm watchdog timer in millisecond.
+     </para>
+     <para>
+      Default value is 60 second (60,000).
+     </para>
+    </listitem>
+   </varlistentry>
+
     </variablelist>
 
   </sect1>

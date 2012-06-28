@@ -16,6 +16,7 @@ typedef struct XcWatchdogInfo
 	int32	arch;				/* 32 or 64 */
 	int		shm_id;
 	int32	node_category;
+	int32	node_status;		/* Valid only for coordinator/datanode */
 	int32	nodename_offset;
 	int32	wkdir_offset;
 } XcWatchdogInfo;
@@ -28,6 +29,19 @@ typedef enum
 	XCNode_Coordinator,
 	XCNode_Datanode
 } XCNodeCategory;
+
+/*
+ * This is used only for coordinator/datanode because
+ * they may take longer in shutdown and the detector
+ * may have to know why watchdog timer is not updated
+ * recently.
+ */
+typedef enum
+{
+	RunMode_Stopped = 0,
+	RunMode_Running,
+	RunMode_Shutdown
+} XCNodeStatus;
 
 #define XcWatchdogMagic 0xF0E1D2C3B4A59687
 #define XcWatchdogModeFlags 0660

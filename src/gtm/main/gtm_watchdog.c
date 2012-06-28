@@ -79,7 +79,7 @@ void gtmWd_restore(void)
 			/*
 			 * Here, continues to use old watchdog timer
 			 * This happens when a watcher keeps detection, while GTM
-			 * faile/stops and then restarts
+			 * fails/stops and then restarts
 			 */
 		}
 	}
@@ -99,10 +99,10 @@ static void write_watchdog_file(int shm_id)
 	int wd_fd;
 
 	snprintf(gtm_watchdog_file, GTM_MAX_PATH-1, "%s/%s", GTMDataDir, GTM_WATCHDOG_FILE);
-	wd_fd = open(gtm_watchdog_file, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IRUSR);
+	wd_fd = open(gtm_watchdog_file, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR);
 	if (wd_fd == -1)
 	{
-		fprintf(stderr, "Failed to create/open watchdog file.\n");
+		fprintf(stderr, "Failed to create/open watchdog file. %s\n", gtm_watchdog_file);
 		exit(2);
 	}
 	write(wd_fd, &shm_id, sizeof(int));
@@ -123,7 +123,7 @@ static int read_watchdog_file(void)
 			/*
 			 * For the first run, the watchdog file may not exist.
 			 */
-			fprintf(stderr, "Failed to open watchdog file for read.\n");
+			fprintf(stderr, "Failed to open watchdog file for read. %s\n", gtm_watchdog_file);
 			exit(2);
 		}
 		return(0);

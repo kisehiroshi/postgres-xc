@@ -51,7 +51,9 @@ OBJS = $(SUBDIROBJS) $(LOCALOBJS) \
 	$(top_builddir)/src/port/libpgport_srv.a \
 	$(top_builddir)/src/gtm/client/libgtmclient.a \
 	$(top_builddir)/src/gtm/common/libgtm.a \
-	$(top_builddir)/src/gtm/libpq/libpqcomm.a	
+	$(top_builddir)/src/gtm/libpq/libpqcomm.a  \
+	$(top_builddir)/src/pgxc/xc_watchdog/common/libxcwatchdog.a
+
 
 # We put libpgport into OBJS, so remove it from LIBS; also add libldap
 LIBS := $(filter-out -lpgport, $(LIBS)) $(LDAP_LIBS_BE)

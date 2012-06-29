@@ -1497,8 +1497,16 @@ ServerLoop(void)
 			struct timeval timeout;
 
 #ifdef PGXC	/* xc_watchdog */
-			timeout.tv_sec = xc_watchdog_interval/1000;
-			timeout.tv_usec = (xc_watchdog_interval % 1000) * 1000;
+			if (xc_watchdog)
+			{
+				timeout.tv_sec = xc_watchdog_interval/1000;
+				timeout.tv_usec = (xc_watchdog_interval % 1000) * 1000;
+			}
+			else
+			{
+				timeout.tv_sec = 60;
+				timeout.tv_usec = 0;
+			}
 #else
 			timeout.tv_sec = 60;
 			timeout.tv_usec = 0;
@@ -2302,6 +2310,9 @@ pmdie(SIGNAL_ARGS)
 			 *
 			 * Wait for children to end their work, then shut down.
 			 */
+#ifdef PGXC
+			nodeWd_setStatus(RunMode_Shutdown);
+#endif
 			if (Shutdown >= SmartShutdown)
 				break;
 			Shutdown = SmartShutdown;
@@ -2364,6 +2375,9 @@ pmdie(SIGNAL_ARGS)
 			 * Abort all children with SIGTERM (rollback active transactions
 			 * and exit) and shut down when they are gone.
 			 */
+#ifdef PGXC
+			nodeWd_setStatus(RunMode_Shutdown);
+#endif
 			if (Shutdown >= FastShutdown)
 				break;
 			Shutdown = FastShutdown;
@@ -2428,6 +2442,9 @@ pmdie(SIGNAL_ARGS)
 			 * abort all children with SIGQUIT and exit without attempt to
 			 * properly shut down data base system.
 			 */
+#ifdef PGXC
+			nodeWd_setStatus(RunMode_Shutdown);
+#endif
 			ereport(LOG,
 					(errmsg("received immediate shutdown request")));
 			SignalChildren(SIGQUIT);
@@ -2455,6 +2472,10 @@ pmdie(SIGNAL_ARGS)
 
 	PG_SETMASK(&UnBlockSig);
 
+#ifdef PGXC
+	nodeWd_setStatus(RunMode_Stopped);
+	nodeWd_detach();
+#endif
 	errno = save_errno;
 }
 
@@ -4379,7 +4400,10 @@ ExitPostmaster(int status)
 	 *
 	 * MUST		-- vadim 05-10-1999
 	 */
-
+#ifdef PGXC
+	nodeWd_setStatus(RunMode_Stopped);
+	nodeWd_detach();
+#endif
 	proc_exit(status);
 }
 

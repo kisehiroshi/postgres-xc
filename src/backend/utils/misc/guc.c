@@ -2553,12 +2553,12 @@ static struct config_int ConfigureNamesInt[] =
 		NULL, NULL, NULL
 	},
 	{
-		{"xc_weatchdog_interval", PGC_POSTMASTER, XC_HA_OPTIONS,
+		{"xc_watchdog_interval", PGC_POSTMASTER, XC_HA_OPTIONS,
 			gettext_noop("XC_watchdog timer update interval, in millisecond."),
 			NULL
 		},
 		&xc_watchdog_interval,
-		60 * 1000, 1, INT_MAX/1000,
+		60 * 1000, 0, INT_MAX/1000,
 		NULL, NULL, NULL
 	},
 #endif

@@ -200,6 +200,7 @@ BaseInit()
 	GTM_InitTxnManager();
 	GTM_InitSeqManager();
 
+	/* Initilize the watchdog */
 	gtmWd_restore();
 
 	/*
@@ -699,6 +700,9 @@ main(int argc, char *argv[])
 	 */
 	status = ServerLoop();
 
+	/* Finish the watchdog */
+	gtmWd_detach();
+
 	/*
 	 * ServerLoop probably shouldn't ever return, but if it does, close down.
 	 */
@@ -816,6 +820,7 @@ ServerLoop(void)
 
 			close(ctlfd);
 
+			/* Finish the watchdog */
 			gtmWd_detach();
 
 			exit(1);

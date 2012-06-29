@@ -264,6 +264,10 @@ BaseInit()
 
 	GTM_RWLockInit(&ReconnectControlLock);
 
+	/* Initialize the watchdog */
+
+	gtmPxyWd_init();
+
 	/* Save Node Register File in register.c */
 	Recovery_SaveRegisterFileName(GTMProxyDataDir);
 
@@ -911,10 +915,14 @@ main(int argc, char *argv[])
 	 */
 	status = ServerLoop();
 
+	/* Finish the watchdog */
+	gtmPxyWd_detach();
+
 	/*
 	 * ServerLoop probably shouldn't ever return, but if it does, close down.
 	 */
 	exit(status != STATUS_OK);
+
 
 	return 0;					/* not reached */
 }
@@ -1020,6 +1028,9 @@ ServerLoop(void)
 
 			gtmPxyWd_detach();
 
+			/* Finish the watchdog */
+			gtmPxyWd_detach();
+
 			exit(1);
 		}
 
@@ -1027,10 +1038,18 @@ ServerLoop(void)
 			/* must set timeout each time; some OSes change it! */
 			struct timeval timeout;
 
+#if 0
 			timeout.tv_sec = 60;
 			timeout.tv_usec = 0;
+#else
+			timeout.tv_sec = gtm_proxy_watchdog_interval/1000;
+			timeout.tv_usec = (gtm_proxy_watchdog_interval % 1000) * 1000;
+#endif
 
 			selres = select(nSockets, &rmask, NULL, NULL, &timeout);
+
+			/* Watchdog timer increment */
+			gtmPxyWd_increment();
 		}
 
 		/*

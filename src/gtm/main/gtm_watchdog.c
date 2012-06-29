@@ -3,13 +3,13 @@
 */
 #include "c.h"
 #include "gtm/gtm_watchdog.h"
+#include "gtm/elog.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
 
 #define GTM_WATCHDOG_FILE	"gtm_watchdog"
-#define GTM_WATCHDOG_SIZE	4096
 #define GTM_MAX_PATH 1024
 
 static XcWatchdogInfo *watchdog = NULL;
@@ -32,13 +32,14 @@ void gtmWd_init(void)
 		write_watchdog_file(0);
 		return;
 	}
-	watchdog = xcWd_initTimer(GTM_WATCHDOG_SIZE, XCNode_GTM, NodeName, GTMDataDir);
+	watchdog = xcWd_initTimer(XCNode_GTM, NodeName, GTMDataDir);
 	if (watchdog == NULL)
 	{
 		fprintf(stderr, "Could not initialize watchdog area. %s\n", strerror(errno));
 		exit(2);
 	}
 	write_watchdog_file(watchdog->shm_id);
+	elog(LOG, "GTM watchdog initialized, interval %d", gtm_watchdog_interval);
 }
 
 void gtmWd_increment(void)
@@ -68,7 +69,7 @@ void gtmWd_restore(void)
 		}
 		else
 		{
-			if (xcWd_checkTimer(watchdog, shm_id, GTM_WATCHDOG_SIZE, XCNode_GTM,
+			if (xcWd_checkTimer(watchdog, shm_id, XCNode_GTM,
 								NodeName, GTMDataDir) == false)
 			{
 				/* The shared memory might be for other use. */
@@ -83,6 +84,7 @@ void gtmWd_restore(void)
 			 */
 		}
 	}
+	elog(LOG, "GTM watchdog restored, interval %d", gtm_watchdog_interval);
 }
 
 void gtmWd_detach(void)
@@ -91,6 +93,7 @@ void gtmWd_detach(void)
 		xcWd_detachTimer(watchdog);
 	watchdog = NULL;
 	write_watchdog_file(0);
+	elog(LOG, "GTM watchdog finished.");
 }
 
 
@@ -118,7 +121,7 @@ static int read_watchdog_file(void)
 	wd_fd = open(gtm_watchdog_file, O_RDONLY, 0);
 	if (wd_fd == -1)
 	{
-		if (errno != EACCES)
+		if (errno != ENOENT)
 		{
 			/*
 			 * For the first run, the watchdog file may not exist.

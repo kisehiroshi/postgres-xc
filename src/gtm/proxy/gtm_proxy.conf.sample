@@ -66,7 +66,11 @@
 #err_wait_interval = 0			# How long (in secs) GTM proxy should wait
 								# until next detection of reconnect from
 								# gtm_ctl.
-#
+#-----------------------------------------------------------------------------
+# HA options
+#-----------------------------------------------------------------------------
+#gtm_watchdog = off				# Enable gtm_watchdog
+#gtm_watchdog_interval = 60000	# Interval to increment watchdog timer (millisec)
 #
 #------------------------------------------------------------------------------
 # Other options

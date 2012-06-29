@@ -569,6 +569,14 @@
 #pgxc_node_name = ''			# Coordinator or Datanode name
 					# (change requires restart)
 
+#-----------------------------------------------------------------------------
+# XC HA options
+#----------------------------------------------------------------------------
+
+#xc_watchdog = off					# enables watchdog
+
+#xc_watchdog_interval = 60000		# Interval to increment watchdog timer (millisec)
+
 ##------------------------------------------------------------------------------
 # OTHER PG-XC OPTIONS
 #------------------------------------------------------------------------------

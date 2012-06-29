@@ -208,8 +208,8 @@ struct config_int ConfigureNamesInt[] =
 			0
 		},
 		&gtm_watchdog_interval,
-		60 * 1000, 60 * 1000, INT_MAX/1000,
-		0, NULL
+		60 * 1000, 0, INT_MAX/1000,
+		60 * 1000, NULL
 	},
 	/* End-of-list marker */
 	{

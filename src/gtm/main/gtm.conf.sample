@@ -45,6 +45,12 @@
 #active_port =				# Port number of active GTM.
 					# (changes requires restart)
 
+#-----------------------------------------------------------------------------
+# HA options
+#----------------------------------------------------------------------------
+#gtm_watchdog = off				# Enables gtm_watchdog
+#gtm_watchdog_interval = 60000	# Interval to increment watchdog timer (millisec)
+#
 #---------------------------------------
 # OTHER OPTIONS
 #---------------------------------------

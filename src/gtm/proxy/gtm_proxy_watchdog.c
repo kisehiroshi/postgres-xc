@@ -1,12 +1,12 @@
 #include "gtm/gtm_c.h"
 #include "gtm/gtm_proxy_watchdog.h"
+#include "gtm/elog.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
 
 #define GTM_PROXY_WATCHDOG_FILE	"gtm_proxy_watchdog"
-#define GTM_PROXY_WATCHDOG_SIZE	4096
 #define GTM_PROXY_MAX_PATH 1024
 
 static XcWatchdogInfo *watchdog = NULL;
@@ -29,13 +29,14 @@ void gtmPxyWd_init(void)
 		write_watchdog_file(0);
 		return;
 	}
-	watchdog = xcWd_initTimer(GTM_PROXY_WATCHDOG_SIZE, XCNode_GTM_Proxy, GTMProxyNodeName, GTMProxyDataDir);
+	watchdog = xcWd_initTimer(XCNode_GTM_Proxy, GTMProxyNodeName, GTMProxyDataDir);
 	if (watchdog == NULL)
 	{
 		fprintf(stderr, "Could not initialize watchdog area. %s\n", strerror(errno));
 		exit(2);
 	}
 	write_watchdog_file(watchdog->shm_id);
+	elog(LOG, "GTM proxy watchdog initialized, interval %d", gtm_proxy_watchdog_interval);
 }
 
 void gtmPxyWd_increment(void)
@@ -65,7 +66,7 @@ void gtmPxyWd_restore(void)
 		}
 		else
 		{
-			if (xcWd_checkTimer(watchdog, shm_id, GTM_PROXY_WATCHDOG_SIZE, XCNode_GTM_Proxy,
+			if (xcWd_checkTimer(watchdog, shm_id, XCNode_GTM_Proxy,
 								GTMProxyNodeName, GTMProxyDataDir) == false)
 			{
 				/* The shared memory might be for other use. */
@@ -80,6 +81,7 @@ void gtmPxyWd_restore(void)
 			 */
 		}
 	}
+	elog(LOG, "GTM proxy watchdog restored, interval %d", gtm_proxy_watchdog_interval);
 }
 
 void gtmPxyWd_detach(void)
@@ -88,6 +90,7 @@ void gtmPxyWd_detach(void)
 		xcWd_detachTimer(watchdog);
 	watchdog = NULL;
 	write_watchdog_file(0);
+	elog(LOG, "GTM proxy watchdog finished.");
 }
 
 static void write_watchdog_file(int shm_id)
@@ -128,6 +131,3 @@ static int read_watchdog_file(void)
 	close(wd_fd);
 	return(shm_id);
 }
-
-
-
